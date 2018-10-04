@@ -1,0 +1,33 @@
+[log-373] [2018-09-21 17:37:18] The response of get cost of bookable product : 190
+[log-1009] [2018-09-21 17:37:18] The response of get_available_bookings : 1
+[log-1024] [2018-09-21 17:37:18] The response of get_wc_booking : {}
+[log-389] [2018-09-21 17:37:19] The response of create_wpexp_wc_booking : {}
+[log-703] [2018-09-21 17:49:02] The response of get cost of bookable product : 190
+[log-1009] [2018-09-21 17:49:02] The response of get_available_bookings : true
+[log-1024] [2018-09-21 17:49:02] The response of get_wc_booking : {}
+[log-703] [2018-09-21 17:49:02] The response of get cost of bookable product : 190
+[log-1009] [2018-09-21 17:49:02] The response of get_available_bookings : true
+[log-1024] [2018-09-21 17:49:02] The response of get_wc_booking : {}
+[log-713] [2018-09-21 17:49:04] The response of create_wpexp_wc_booking : {}
+[log-713] [2018-09-21 17:49:04] The response of create_wpexp_wc_booking : {}
+[log-373] [2018-09-21 18:00:26] The response of get cost of bookable product : {"errors":{"Error":["D\u00e9sol\u00e9, le bloc s\u00e9lectionn\u00e9 n&rsquo;est pas disponible"]},"error_data":[]}
+[log-703] [2018-09-21 18:04:09] The response of get cost of bookable product : 80
+[log-1009] [2018-09-21 18:04:09] The response of get_available_bookings : true
+[log-1024] [2018-09-21 18:04:09] The response of get_wc_booking : {}
+[log-713] [2018-09-21 18:04:11] The response of create_wpexp_wc_booking : {}
+[log-703] [2018-09-21 18:07:10] The response of get cost of bookable product : 190
+[log-1009] [2018-09-21 18:07:10] The response of get_available_bookings : true
+[log-1024] [2018-09-21 18:07:10] The response of get_wc_booking : {}
+[log-713] [2018-09-21 18:07:11] The response of create_wpexp_wc_booking : {}
+[log-703] [2018-09-21 18:23:17] The response of get cost of bookable product : {"errors":{"Error":["There are a maximum of 0 places remaining on 25 septembre 2018"]},"error_data":[]}
+[log-703] [2018-09-21 18:23:17] The response of get cost of bookable product : {"errors":{"Error":["There are a maximum of 0 places remaining on 25 septembre 2018"]},"error_data":[]}
+[log-703] [2018-09-21 18:24:24] The response of get cost of bookable product : {"errors":{"Error":["There are a maximum of 0 places remaining on 25 septembre 2018"]},"error_data":[]}
+[log-703] [2018-09-21 18:26:02] The response of get cost of bookable product : {"errors":{"Error":["There are a maximum of 0 places remaining on 25 septembre 2018"]},"error_data":[]}
+[log-703] [2018-09-21 18:26:14] The response of get cost of bookable product : {"errors":{"Error":["There are a maximum of 0 places remaining on 25 septembre 2018"]},"error_data":[]}
+[log-703] [2018-09-21 18:27:29] The response of get cost of bookable product : {"errors":{"Error":["There are a maximum of 0 places remaining on 25 septembre 2018"]},"error_data":[]}
+[log-703] [2018-09-21 18:27:29] The response of get cost of bookable product : 190
+[log-1009] [2018-09-21 18:27:29] The response of get_available_bookings : true
+[log-1024] [2018-09-21 18:27:29] The response of get_wc_booking : {}
+[log-713] [2018-09-21 18:27:30] The response of create_wpexp_wc_booking : {}
+[log-703] [2018-09-21 18:31:05] The response of get cost of bookable product : {"errors":{"Error":["There are a maximum of 0 places remaining on 26 septembre 2018"]},"error_data":[]}
+[log-373] [2018-09-21 18:37:47] The response of get cost of bookable product : {"errors":{"Error":["There are a maximum of 0 places remaining on 26 septembre 2018"]},"error_data":[]}
