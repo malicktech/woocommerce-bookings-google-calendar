@@ -91,8 +91,12 @@ function overwrite_person_info($data, $booking){
         	    }
 	    }
 		
-		
-		
+		// var_dump($booking);
+		// debug_log_wpexperts();
+		debug_log_wpexperts('log-'.__LINE__, $booking);
+
+		// Author : Malick
+		// info person mis dans la description
 		$booking_data = array(
 			__( 'Booking ID', 'woocommerce-bookings' )   => $booking->get_id(),
 			__( 'Booking Type', 'woocommerce-bookings' ) => is_object( $resource ) ? $resource->get_title() : '',
