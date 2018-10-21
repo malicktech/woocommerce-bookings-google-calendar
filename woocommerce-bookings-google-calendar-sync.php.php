@@ -93,12 +93,13 @@ function overwrite_person_info($data, $booking){
 		
 		// var_dump($booking);
 		// debug_log_wpexperts();
-		debug_log_wpexperts('log-'.__LINE__, $booking);
-
+		$customer = $booking->get_customer();
+		debug_log_wpexperts('log-'.__LINE__, $customer);
 		// Author : Malick
 		// info person mis dans la description
 		$booking_data = array(
 			__( 'Booking ID', 'woocommerce-bookings' )   => $booking->get_id(),
+			__( 'Booked by', 'woocommerce-bookings' )    => $customer && ! empty( $customer->name ) ? $customer->name : 'Employe Saona';
 			__( 'Booking Type', 'woocommerce-bookings' ) => is_object( $resource ) ? $resource->get_title() : '',
 			__( 'Persons', 'woocommerce-bookings' )      => $booking->has_persons() ? array_sum( $booking->get_persons() ) : 0,
 		);
