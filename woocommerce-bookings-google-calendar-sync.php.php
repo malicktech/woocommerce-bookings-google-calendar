@@ -187,17 +187,47 @@ $wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_
 			$service = get_goo_list($access_token);
 		}
 	$updated_events = 0;
-	 if(!empty($service->items)){
-		
-		
-					
+	 if(!empty($service->items)){		
+		/*
+		{
+			"kind": "calendar#event",
+			"etag": "\"3080314687694000\"",
+			"id": "5ctten3jvt2p6bbh9lbp4soa9r",
+			"status": "confirmed",
+			"htmlLink": "https://www.google.com/calendar/event?eid=NWN0dGVuM2p2dDJwNmJiaDlsYnA0c29hOXIgdGVzdC5zbmVjb21tZXJjZUBt",
+			"created": "2018-10-21T21:29:03.000Z",
+			"updated": "2018-10-21T21:29:03.847Z",
+			"summary": "HOTE",
+			"creator": {
+			"email": "test.snecommerce@gmail.com",
+			"displayName": "Compte de test SNE",
+			"self": true
+			},
+			"organizer": {
+			"email": "test.snecommerce@gmail.com",
+			"displayName": "Compte de test SNE",
+			"self": true
+			},
+			"start": {
+			"dateTime": "2018-11-01T15:00:00+01:00"
+			},
+			"end": {
+			"dateTime": "2018-11-01T16:00:00+01:00"
+			},
+			"iCalUID": "5ctten3jvt2p6bbh9lbp4soa9r@google.com",
+			"sequence": 0,
+			"extendedProperties": {
+			"private": {
+			"everyoneDeclinedDismissed": "-1"
+			}
+		}
+		*/
 		  foreach ($service->items as $event) {
-			$event_id = $event->id;
-			
+			$event_id = $event->id;		
 			$event_title = @$event->summary; 
-			$event_titlearray = explode('-',$event_title);
-			
-			if(trim($event_titlearray[0]) == 'Booking' or trim($event_titlearray[0]) == 'booking'){
+			// Author = @Malick
+			// $event_titlearray = explode('-',$event_title);
+			// if(trim($event_titlearray[0]) == 'Booking' or trim($event_titlearray[0]) == 'booking'){
 			$posted = array();
 			if(!empty($event->start->date)){
 				$start = $event->start->date;
@@ -224,8 +254,11 @@ $wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_
 				
 			}		
 			
-			$check_booking_status = explode('-', $event_title);
-			$product = get_page_by_title( trim($event_titlearray[1]), OBJECT, 'product' );
+			$check_booking_status = explode('-', $event_title); // TODO : sert a quoi ? DONT KNOW
+			// retrieve product by title TRIMmed and converted to uppercase before
+			// https://codex.wordpress.org/Function_Reference/get_page_by_title
+			/* Because this function uses the MySQL '=' comparison the $page_title will usually be matched as case insensitive  */
+			$product = get_page_by_title( strtoupper(trim($event_title)), OBJECT, 'product' );
 			if($product){
 				if(!empty($event->description)){
 					
@@ -414,7 +447,7 @@ $wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_
 				}
 			}
 				
-				}
+				// }
 		  }
 	}
 		  
@@ -508,17 +541,14 @@ function bookings_list_page(){
 		
 		
 					
-	if(!empty($service->items)){
-		
-		
-					
+	if(!empty($service->items)) {
+							
 		  foreach ($service->items as $event) {
-			$event_id = $event->id;
-			
-			$event_title = @$event->summary; 
-			$event_titlearray = explode('-',$event_title);
-			
-			if(trim($event_titlearray[0]) == 'Booking' or trim($event_titlearray[0]) == 'booking'){
+			$event_id = $event->id;			
+			$event_title = @$event->summary;
+			// Author = @Malick 
+			// $event_titlearray = explode('-',$event_title);
+			// if(trim($event_titlearray[0]) == 'Booking' or trim($event_titlearray[0]) == 'booking'){
 			$posted = array();
 			if(!empty($event->start->date)){
 				$start = $event->start->date;
@@ -545,8 +575,8 @@ function bookings_list_page(){
 				
 			}		
 			
-			$check_booking_status = explode('-', $event_title);
-			$product = get_page_by_title( trim($event_titlearray[1]), OBJECT, 'product' );
+			$check_booking_status = explode('-', $event_title);// TODO ?
+			$product = get_page_by_title( strtoupper(trim($event_title)), OBJECT, 'product' );
 			if($product){
 				if(!empty($event->description)){
 					/* $event_description = explode('Persons',$event->description);
@@ -738,7 +768,7 @@ function bookings_list_page(){
 				}
 			}
 				
-				}
+				// }
 		  }
 	}
 		  
@@ -784,10 +814,13 @@ function bookings_list_page(){
 	</div>
 	<?php 
 }
+
+// Récupération de la liste des events google
+// timemIN FORMAT = 2018-10-20T14:30:00Z
 function get_goo_list($access_token){
 			
 			// Google calendar api GET event
-			// https://developers.google.com/calendar/v3/reference/events/get
+			// https://developers.google.com/calendar/v3/reference/events/list
 			$wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_settings');
 	        $calendar_id = $wc_bookings_google_calendar_settings['calendar_id'];
 	        $today = date("Y-m-d", strtotime("-1 days"));
