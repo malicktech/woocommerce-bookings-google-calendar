@@ -786,6 +786,8 @@ function bookings_list_page(){
 }
 function get_goo_list($access_token){
 			
+			// Google calendar api GET event
+			// https://developers.google.com/calendar/v3/reference/events/get
 			$wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_settings');
 	        $calendar_id = $wc_bookings_google_calendar_settings['calendar_id'];
 	        $today = date("Y-m-d", strtotime("-1 days"));
@@ -1053,6 +1055,8 @@ function register_deactivation_hook_function(){
 			
 }
 
+// Enregistre les résultats de la synchro dans les options wordpress :
+// table rs_options, option woocommerce_bookings_google_calendar_sync_logs
 function update_log_in_db($logs,$event_title,$event_id){
 	$logs = array('currenttime_date'  => date("Y-m-d h:i:sa"), 'event_id' => $event_id, 'log' => $logs , 'Event_Title' => $event_title);
 	if(!empty($logs)){
