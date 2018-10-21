@@ -99,7 +99,7 @@ function overwrite_person_info($data, $booking){
 		// info person mis dans la description
 		$booking_data = array(
 			__( 'Booking ID', 'woocommerce-bookings' )   => $booking->get_id(),
-			__( 'Booked by', 'woocommerce-bookings' )    => $customer && ! empty( $customer->name ) ? $customer->name : 'Employe Saona';
+			__( 'Booked by', 'woocommerce-bookings' )    => $customer && ! empty( $customer->name ) ? $customer->name : 'Employe Saona',
 			__( 'Booking Type', 'woocommerce-bookings' ) => is_object( $resource ) ? $resource->get_title() : '',
 			__( 'Persons', 'woocommerce-bookings' )      => $booking->has_persons() ? array_sum( $booking->get_persons() ) : 0,
 		);
