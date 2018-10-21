@@ -986,7 +986,7 @@ function create_wpexp_wc_booking( $product_id, $new_booking_data = array(), $sta
 								$counter++;
 								// print_r($counter);
 								if($counter >= get_post_meta($bookable_product->get_id(),'_wc_booking_qty',true)){
-									update_log_in_db('no booking available in this slot '.gmdate("Y-m-d H:i:s a",$entereddate).' To '. gmdate("Y-m-d H:i:s a",$enddate),'booking - '.$bookable_product->get_title(),'none');
+									update_log_in_db('no booking available in this slot '.gmdate("Y-m-d H:i:s a",$entereddate).' To '. gmdate("Y-m-d H:i:s a",$enddate), $bookable_product->get_title(),'none');
 									$available_bookings = false;
 								} 
 								
