@@ -95,18 +95,18 @@ function overwrite_person_info($data, $booking){
 		// debug_log_wpexperts();
 		// $customer = $booking->get_customer();
 		$order    = $booking->get_order();
-
-		debug_log_wpexperts('log-'.__LINE__, $order);
+		// debug_log_wpexperts('log-'.__LINE__, $order);
 		// Author : Malick
 		// info person mis dans la description
 		$booking_data = array(
 			__( 'Booking ID', 'woocommerce-bookings' )   => $booking->get_id(),
+			__( 'Booking Status', 'woocommerce-bookings' )   => $booking->get_status(),
 			__( 'Booked by', 'woocommerce-bookings' )    => $booking->get_customer() && ! empty( $booking->get_customer()->name ) ? $booking->get_customer()->name : 'Employe Saona',
-			__( 'Order date', 'woocommerce-bookings' )   => $order->get_date_created() ? $order->get_date_created()->date( 'Y-m-d H:i:s' ) : '',
-			__( 'Order status', 'woocommerce-bookings' )   => $order->get_status() ? $order->get_status(): '',
-			__( 'Order Total price', 'woocommerce-bookings' )   => $order->get_formatted_order_total() ? $order->get_formatted_order_total(): '',
 			__( 'Booking Type', 'woocommerce-bookings' ) => is_object( $resource ) ? $resource->get_title() : '',
 			__( 'Persons', 'woocommerce-bookings' )      => $booking->has_persons() ? array_sum( $booking->get_persons() ) : 0,
+			__( 'Order date', 'woocommerce-bookings' )   => $order->get_date_created() ? $order->get_date_created()->date( 'Y-m-d H:i:s' ) : '',
+			__( 'Order status', 'woocommerce-bookings' )   => $order->get_status() ? $order->get_status(): '',
+			__( 'Order Total paid', 'woocommerce-bookings' )   => $order->get_formatted_order_total() ? $order->get_formatted_order_total(): '',
 		);
 		
 		if(!empty($booking_persontype) and is_array($booking_persontype)){
