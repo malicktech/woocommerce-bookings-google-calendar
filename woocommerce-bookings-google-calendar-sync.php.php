@@ -95,7 +95,7 @@ function overwrite_person_info($data, $booking){
 		// debug_log_wpexperts();
 		// $customer = $booking->get_customer();
 		$order    = $booking->get_order();
-		// debug_log_wpexperts('log-'.__LINE__, $order);
+		debug_log_wpexperts('log-'.__LINE__, $booking);
 		// Author : Malick
 		// info person mis dans la description
 		$booking_data = array(
