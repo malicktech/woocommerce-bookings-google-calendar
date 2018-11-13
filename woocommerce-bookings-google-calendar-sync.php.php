@@ -328,10 +328,7 @@ $wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_
 										$personfor_calculate['wc_bookings_field_persons_'.$posts->ID] = $valuexploded[1];
 									}
 								}
-							}
-									
-								
-								
+							}								
 								
 							}
 							
@@ -340,9 +337,9 @@ $wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_
 						
 										
 					}
-					
-	
-				
+									
+					// custom - set ressource automatically
+					$resource_name = strtoupper(trim($event_title);
 					if(empty($resource_name)){
 						$resource_id = null;
 					} else {
@@ -351,7 +348,9 @@ $wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_
 						 if(!empty($resource_name->ID)){ $resource_id = $resource_name->ID;}else{ $resource_id = null; }
 					}
 				}
+
 				
+
 					if(empty($person)){
 						$person = 1;
 					}
