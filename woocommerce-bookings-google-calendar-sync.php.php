@@ -339,7 +339,7 @@ $wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_
 					}
 									
 					// custom - set ressource automatically
-					$resource_name = strtoupper(trim($event_title);
+					$resource_name = strtoupper(trim($event_title));
 					if(empty($resource_name)){
 						$resource_id = null;
 					} else {
@@ -347,6 +347,11 @@ $wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_
 						
 						 if(!empty($resource_name->ID)){ $resource_id = $resource_name->ID;}else{ $resource_id = null; }
 					}
+				} else {
+					// custom - set ressource automatically
+					$resource_name = strtoupper(trim($event_title));
+					$resource_name = get_page_by_title($resource_name, OBJECT, 'bookable_resource');					
+					if(!empty($resource_name->ID)){ $resource_id = $resource_name->ID;}else{ $resource_id = null; }					
 				}
 
 				
