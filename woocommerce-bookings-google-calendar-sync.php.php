@@ -97,17 +97,22 @@ function overwrite_person_info($data, $booking){
 		$order    = $booking->get_order();
 		// debug_log_wpexperts('log-'.__LINE__, $booking);
 		debug_log_wpexperts('log-'.__LINE__, $order);
+
+		$booking_status = $booking->get_status();
+		if($booking_status == 'wc-partial-payment') {
+			$booking_status = 'Acompte';
+		}
 		// Author : Malick
 		// info person mis dans la description
 		$booking_data = array(
 			__( 'Identifiant r&eacute;servation', 'woocommerce-bookings' )   => $booking->get_id(),
-			__( 'Statut R&eacute;servation', 'woocommerce-bookings' )   => __( $booking->get_status(), 'woocommerce-bookings' ),
+			__( 'Statut r&eacute;servation', 'woocommerce-bookings' )   => $booking_status,
 			__( 'Client', 'woocommerce-bookings' )    => $booking->get_customer() && ! empty( $booking->get_customer()->name ) ? $booking->get_customer()->name : 'Employe Saona',
 			__( 'Salle', 'woocommerce-bookings' ) => is_object( $resource ) ? $resource->get_title() : '',
 			__( 'Persons', 'woocommerce-bookings' )      => $booking->has_persons() ? array_sum( $booking->get_persons() ) : 0,
 			__( 'Date commande', 'woocommerce-bookings' )   => $order && $order->get_date_created() ? $order->get_date_created()->date( 'Y-m-d H:i:s' ) : '',
 			__( 'Statut commande', 'woocommerce-bookings' )   => $order && $order->get_status() ? $order->get_status(): '',
-			__( 'Montant pay', 'woocommerce-bookings' )   => $order && $order->get_formatted_order_total() ? $order->get_formatted_order_total(): '',
+			__( 'Montant pay&eacute;', 'woocommerce-bookings' )   => $order && $order->get_formatted_order_total() ? $order->get_formatted_order_total(): '',
 		);
 		
 		if(!empty($booking_persontype) and is_array($booking_persontype)){
