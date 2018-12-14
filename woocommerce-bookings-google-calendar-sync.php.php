@@ -94,13 +94,20 @@ function overwrite_person_info($data, $booking){
 		// debug_log_wpexperts();
 		// $customer = $booking->get_customer();
 		$order    = $booking->get_order();
-		debug_log_wpexperts('log-'.__LINE__, $booking);
-		debug_log_wpexperts('log-'.__LINE__, $order);
-
+		// debug_log_wpexperts('log-'.__LINE__, $booking);
+		// debug_log_wpexperts('log-'.__LINE__, $order);
 		$booking_status = $booking->get_status();
 		if($booking_status == 'wc-partial-payment') {
 			$booking_status = 'Acompte';
 		}
+		elseif($booking_status == 'paid') {
+			$booking_status = 'Payé';
+		}
+		// else : confirmed
+
+		// TODO if order status = 'partial-payment'
+		// TODO if ORDER status = 'PENDING', status = 'completed'
+
 		// Author : Malick
 		// info person mis dans la description
 		$booking_data = array(
@@ -239,6 +246,7 @@ function action_woocommerce_before_single_product(  ) {
 						// Author = @Malick
 						// $event_titlearray = explode('-',$event_title);
 						// if(trim($event_titlearray[0]) == 'Booking' or trim($event_titlearray[0]) == 'booking'){
+							
 						$posted = array();
 						if(!empty($event->start->date)){
 							$start = $event->start->date;
@@ -413,10 +421,7 @@ function action_woocommerce_before_single_product(  ) {
 									$posted = array_merge($posted,$personfor_calculate);
 								}
 							$cost = $booking_form->calculate_booking_cost( $posted );
-							
 					
-					
-							
 							
 							debug_log_wpexperts('log-'.__LINE__, "The response of get cost of bookable product : " . json_encode($cost));
 							if ( is_wp_error( $cost ) ) {
@@ -442,7 +447,7 @@ function action_woocommerce_before_single_product(  ) {
 							if(@$new_booking and is_numeric($cost)){
 								
 								
-								$order_id = wpexp_create_booking_order($product->ID,$event_title,$cost);
+								$order_id = wpexp_create_booking_order($product->ID,$event_title,$cost, $event->description);
 								if($order_id){
 									// Update post 37
 									$my_post = array(
@@ -468,7 +473,7 @@ function action_woocommerce_before_single_product(  ) {
 					
 					
 					if($updated_events){
-						// echo '#'.$updated_events.' bookings has been added.';
+						echo '#'.$updated_events.' bookings has been added.';
 						$wooclass = new WC_Bookings_Google_Calendar_Integration();
 						foreach($event_idies as $event_id){
 							
@@ -763,7 +768,7 @@ function bookings_list_page(){
 				if(@$new_booking and is_numeric($cost)){
 					
 					
-					$order_id = wpexp_create_booking_order($product->ID,$event_title,$cost);
+					$order_id = wpexp_create_booking_order($product->ID,$event_title,$cost, $event->description);
 					if($order_id){
 						// Update post 37
 						$my_post = array(
@@ -866,7 +871,7 @@ function get_goo_list($access_token){
 			}
 }
 
-function wpexp_create_booking_order( $pid,$event_title ,$cost){
+function wpexp_create_booking_order( $pid,$event_title ,$cost, $eventdescriptionnote){
 	$order_date = new DateTime();
 	// build order data
 	$order_data = array(
@@ -879,7 +884,10 @@ function wpexp_create_booking_order( $pid,$event_title ,$cost){
 		'post_author'   => 1,
 		'post_password' => uniqid( 'order_' ),   // Protects the post just in case
 		'post_date'     => date_format($order_date, 'Y-m-d H:i:s e'), //'order-jun-19-2014-0648-pm'
-		'comment_status' => 'open'
+		'comment_status' => 'open',
+		'meta_input'   => array(
+			'eventdescriptionnote' =>  $eventdescriptionnote
+		)
 	);
 
 	// create order
