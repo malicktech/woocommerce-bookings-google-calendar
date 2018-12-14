@@ -94,7 +94,7 @@ function overwrite_person_info($data, $booking){
 		// debug_log_wpexperts();
 		// $customer = $booking->get_customer();
 		$order    = $booking->get_order();
-		// debug_log_wpexperts('log-'.__LINE__, $booking);
+		debug_log_wpexperts('log-'.__LINE__, $booking);
 		debug_log_wpexperts('log-'.__LINE__, $order);
 
 		$booking_status = $booking->get_status();
@@ -491,7 +491,7 @@ function action_woocommerce_before_single_product(  ) {
 							
 						}
 					} else {
-							// echo '#0 booking has been added.';
+							echo '#0 booking has been added.';
 					}
 			}
 	}
