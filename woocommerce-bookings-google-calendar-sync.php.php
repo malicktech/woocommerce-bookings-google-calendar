@@ -108,9 +108,13 @@ function overwrite_person_info($data, $booking){
 		// TODO if order status = 'partial-payment'
 		// TODO if ORDER status = 'PENDING', status = 'completed'
 
+		// https://businessbloomer.com/woocommerce-easily-get-order-info-total-items-etc-from-order-object/
+		$retrieved_eventdescriptionnote = get_post_meta( $order->get_id(), 'eventdescriptionnote', true );
+
 		// Author : Malick
 		// info person mis dans la description
 		$booking_data = array(
+			__( 'Notes', 'woocommerce-bookings' )   => $retrieved_eventdescriptionnote ? $retrieved_eventdescriptionnote: '',
 			__( 'Identifiant r&eacute;servation', 'woocommerce-bookings' )   => $booking->get_id(),
 			__( 'Statut r&eacute;servation', 'woocommerce-bookings' )   => $booking_status,
 			__( 'Client', 'woocommerce-bookings' )    => $booking->get_customer() && ! empty( $booking->get_customer()->name ) ? $booking->get_customer()->name : 'Employe Saona',
