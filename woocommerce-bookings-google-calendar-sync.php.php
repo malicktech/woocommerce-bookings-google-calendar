@@ -101,7 +101,15 @@ function overwrite_person_info($data, $booking){
 			$booking_status = 'Acompte';
 		}
 		elseif($booking_status == 'paid') {
-			$booking_status = 'Payé';
+			$booking_status = 'Pay&eacute;';
+		}
+		elseif($booking_status == 'confirmed') {
+			$booking_status = 'Confirm&eacute;';
+		}
+
+		$booking_order_status = $bookingorder && $bookingorder->get_status() ? $bookingorder->get_status(): '';
+		if($booking_order_status->get_status() == 'completed') {
+			$booking_order_status = 'Termin&eacute;';
 		}
 		// else : confirmed
 
@@ -109,9 +117,9 @@ function overwrite_person_info($data, $booking){
 		// TODO if ORDER status = 'PENDING', status = 'completed'
 
 		// https://businessbloomer.com/woocommerce-easily-get-order-info-total-items-etc-from-order-object/
-		debug_log_wpexperts('log-'.__LINE__, $booking->get_order_id());
+		// debug_log_wpexperts('log-'.__LINE__, $booking->get_order_id());
 		$retrieved_eventdescriptionnote = get_post_meta( $booking->get_order_id(), 'eventdescriptionnote', true );
-		debug_log_wpexperts('log-'.__LINE__, $retrieved_eventdescriptionnote);
+		// debug_log_wpexperts('log-'.__LINE__, $retrieved_eventdescriptionnote);
 
 		// Author : Malick
 		// info person mis dans la description
@@ -123,7 +131,7 @@ function overwrite_person_info($data, $booking){
 			__( 'Salle', 'woocommerce-bookings' ) => is_object( $resource ) ? $resource->get_title() : '',
 			__( 'Persons', 'woocommerce-bookings' )      => $booking->has_persons() ? array_sum( $booking->get_persons() ) : 0,
 			__( 'Date commande', 'woocommerce-bookings' )   => $bookingorder && $bookingorder->get_date_created() ? $bookingorder->get_date_created()->date( 'Y-m-d H:i:s' ) : '',
-			__( 'Statut commande', 'woocommerce-bookings' )   => $bookingorder && $bookingorder->get_status() ? $bookingorder->get_status(): '',
+			__( 'Statut commande', 'woocommerce-bookings' )   => $booking_order_status,
 			__( 'Montant pay&eacute;', 'woocommerce-bookings' )   => $bookingorder && $bookingorder->get_formatted_order_total() ? $bookingorder->get_formatted_order_total(): '',
 		);
 		
