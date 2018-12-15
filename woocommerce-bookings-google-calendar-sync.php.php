@@ -108,7 +108,7 @@ function overwrite_person_info($data, $booking){
 		}
 
 		$booking_order_status = $bookingorder && $bookingorder->get_status() ? $bookingorder->get_status(): '';
-		if($booking_order_status->get_status() == 'completed') {
+		if($booking_order_status == 'completed') {
 			$booking_order_status = 'Termin&eacute;';
 		}
 		// else : confirmed
