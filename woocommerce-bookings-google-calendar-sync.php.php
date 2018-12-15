@@ -93,9 +93,9 @@ function overwrite_person_info($data, $booking){
 		// var_dump($booking);
 		// debug_log_wpexperts();
 		// $customer = $booking->get_customer();
-		$order    = $booking->get_order();
+		$bookingorder    = $booking->get_order();
 		// debug_log_wpexperts('log-'.__LINE__, $booking);
-		// debug_log_wpexperts('log-'.__LINE__, $order);
+		// debug_log_wpexperts('log-'.__LINE__, $bookingorder);
 		$booking_status = $booking->get_status();
 		if($booking_status == 'wc-partial-payment') {
 			$booking_status = 'Acompte';
@@ -109,7 +109,9 @@ function overwrite_person_info($data, $booking){
 		// TODO if ORDER status = 'PENDING', status = 'completed'
 
 		// https://businessbloomer.com/woocommerce-easily-get-order-info-total-items-etc-from-order-object/
-		$retrieved_eventdescriptionnote = get_post_meta( $order['id'], 'eventdescriptionnote', true );
+		debug_log_wpexperts('log-'.__LINE__, $booking->get_order_id());
+		$retrieved_eventdescriptionnote = get_post_meta( $booking->get_order_id(), 'eventdescriptionnote', true );
+		debug_log_wpexperts('log-'.__LINE__, $retrieved_eventdescriptionnote);
 
 		// Author : Malick
 		// info person mis dans la description
@@ -120,9 +122,9 @@ function overwrite_person_info($data, $booking){
 			__( 'Client', 'woocommerce-bookings' )    => $booking->get_customer() && ! empty( $booking->get_customer()->name ) ? $booking->get_customer()->name : 'Employe Saona',
 			__( 'Salle', 'woocommerce-bookings' ) => is_object( $resource ) ? $resource->get_title() : '',
 			__( 'Persons', 'woocommerce-bookings' )      => $booking->has_persons() ? array_sum( $booking->get_persons() ) : 0,
-			__( 'Date commande', 'woocommerce-bookings' )   => $order && $order->get_date_created() ? $order->get_date_created()->date( 'Y-m-d H:i:s' ) : '',
-			__( 'Statut commande', 'woocommerce-bookings' )   => $order && $order->get_status() ? $order->get_status(): '',
-			__( 'Montant pay&eacute;', 'woocommerce-bookings' )   => $order && $order->get_formatted_order_total() ? $order->get_formatted_order_total(): '',
+			__( 'Date commande', 'woocommerce-bookings' )   => $bookingorder && $bookingorder->get_date_created() ? $bookingorder->get_date_created()->date( 'Y-m-d H:i:s' ) : '',
+			__( 'Statut commande', 'woocommerce-bookings' )   => $bookingorder && $bookingorder->get_status() ? $bookingorder->get_status(): '',
+			__( 'Montant pay&eacute;', 'woocommerce-bookings' )   => $bookingorder && $bookingorder->get_formatted_order_total() ? $bookingorder->get_formatted_order_total(): '',
 		);
 		
 		if(!empty($booking_persontype) and is_array($booking_persontype)){
