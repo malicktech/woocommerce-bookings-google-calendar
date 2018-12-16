@@ -110,6 +110,9 @@ function overwrite_person_info($data, $booking){
 		$booking_order_status = $bookingorder && $bookingorder->get_status() ? $bookingorder->get_status(): '';
 		if($booking_order_status == 'completed') {
 			$booking_order_status = 'Termin&eacute;';
+		} 
+		elseif($booking_order_status == 'partial-payment') {
+			$booking_order_status = 'Acompte';
 		}
 		// else : confirmed
 
@@ -480,14 +483,12 @@ function action_woocommerce_before_single_product(  ) {
 								}
 							}
 						}
-							
-							// }
 					}
 				}
 					
 					
 					if($updated_events){
-						echo '#'.$updated_events.' bookings has been added.';
+						// echo '#'.$updated_events.' bookings has been added.';
 						$wooclass = new WC_Bookings_Google_Calendar_Integration();
 						foreach($event_idies as $event_id){
 							
