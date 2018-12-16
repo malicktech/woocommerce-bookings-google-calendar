@@ -539,7 +539,7 @@ add_filter('cron_schedules','my_cron_schedules_every_minute');
 function my_cron_schedules_every_minute($schedules){
 	if(!isset($schedules["1min"])){
         $schedules["1min"] = array(
-            'interval' => 60*1,
+            'interval' => 30,
             'display' => __('Once every minute'));
     }
     return $schedules;
