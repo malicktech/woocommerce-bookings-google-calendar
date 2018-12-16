@@ -111,7 +111,7 @@ function overwrite_person_info($data, $booking){
 		if($booking_order_status == 'completed') {
 			$booking_order_status = 'Termin&eacute;';
 		} 
-		elseif($booking_order_status == 'partial-payment') {
+		elseif($booking_order_status == 'partial-payment' || $booking_order_status == 'wc-partial-payment') {
 			$booking_order_status = 'Acompte';
 		}
 		// else : confirmed
@@ -522,7 +522,7 @@ function action_woocommerce_before_single_product(  ) {
 } 
          
 // add the action 
-add_action( 'woocommerce_before_single_product', 'action_woocommerce_before_single_product', 10, 2 ); 
+// add_action( 'woocommerce_before_single_product', 'action_woocommerce_before_single_product', 10, 2 ); 
 
 /* TEST GCalendar PUSH notif */
 // https://developers.google.com/calendar/v3/push?authuser=6
