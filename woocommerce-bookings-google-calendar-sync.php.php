@@ -531,6 +531,37 @@ add_action( 'woocommerce_before_single_product', 'action_woocommerce_before_sing
 // https://spa-prive-lille.fr/wp-admin/admin-ajax.php?action=google-push-notification-call
 add_action('wp_ajax_google-push-notification-call', 'action_woocommerce_before_single_product');
 
+/* CRON every five seconde */
+function my_cron_schedules($schedules){
+	if(!isset($schedules["5sec"])){
+        $schedules["5sec"] = array(
+            'interval' => 5,
+            'display' => __('Once every 5 secondes'));
+    }
+	if(!isset($schedules["5min"])){
+        $schedules["5min"] = array(
+            'interval' => 5*60,
+            'display' => __('Once every 5 minutes'));
+    }
+    if(!isset($schedules["30min"])){
+        $schedules["30min"] = array(
+            'interval' => 30*60,
+            'display' => __('Once every 30 minutes'));
+    }
+    return $schedules;
+}
+add_filter('cron_schedules','my_cron_schedules');
+
+register_activation_hook(__FILE__, 'google_sync_cron_activation');
+ 
+function google_sync_cron_activation() {
+ if (! wp_next_scheduled ( 'mon_evenement_sync_google' )) {
+ wp_schedule_event(time(), '5sec', 'mon_evenement_sync_google');
+ }
+}
+ 
+add_action('mon_evenement_sync_google', 'action_woocommerce_before_single_product');
+
 
 function bookings_list_page(){
 	
