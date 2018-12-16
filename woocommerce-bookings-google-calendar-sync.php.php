@@ -195,7 +195,9 @@ function delete_log_function(){
 
 
 // define the woocommerce_before_single_product callback 
-function action_woocommerce_before_single_product(  ) { 
+function action_woocommerce_before_single_product(  ) {
+
+	debug_log_wpexperts('log-'.__LINE__, 'call action_woocommerce_before_single_product';
 
 	$t=time();
 	$get_transient = get_transient( 'google_sync' );
@@ -489,6 +491,7 @@ function action_woocommerce_before_single_product(  ) {
 					
 					if($updated_events){
 						// echo '#'.$updated_events.' bookings has been added.';
+						debug_log_wpexperts('log-'.__LINE__, '#'.$updated_events.' bookings has been added.';
 						$wooclass = new WC_Bookings_Google_Calendar_Integration();
 						foreach($event_idies as $event_id){
 							
@@ -511,7 +514,8 @@ function action_woocommerce_before_single_product(  ) {
 							
 						}
 					} else {
-							echo '#0 booking has been added.';
+							// echo '#0 booking has been added.';
+							debug_log_wpexperts('log-'.__LINE__, '#0 bookings has been added.';
 					}
 			}
 	}
@@ -519,6 +523,14 @@ function action_woocommerce_before_single_product(  ) {
          
 // add the action 
 add_action( 'woocommerce_before_single_product', 'action_woocommerce_before_single_product', 10, 2 ); 
+
+/* TEST GCalendar PUSH notif */
+// https://developers.google.com/calendar/v3/push?authuser=6
+// Use the AJAX API
+// register an ajax action and use that action url to send requests.
+// https://spa-prive-lille.fr/wp-admin/admin-ajax.php?action=google-push-notification-call
+add_action('wp_ajax_google-push-notification-call', 'action_woocommerce_before_single_product');
+
 
 function bookings_list_page(){
 	
@@ -680,21 +692,11 @@ function bookings_list_page(){
 										$personfor_calculate['wc_bookings_field_persons_'.$posts->ID] = $valuexploded[1];
 									}
 								}
-							}
-									
-								
-								
-								
-							}
-							
-						
-						}
-						
-										
+							}																																	
+							}													
+						}										
 					}
-					
-	
-				
+									
 					if(empty($resource_name)){
 						$resource_id = null;
 					} else {
@@ -753,17 +755,12 @@ function bookings_list_page(){
 					$posted['wc_bookings_field_resource'] = @$resource_id;
 					$posted['wc_bookings_field_start_date_to_day'] = $endday;
 					$posted['wc_bookings_field_start_date_to_year'] = $endyearss;
-
 					
 					if(!empty($personfor_calculate) and is_array($personfor_calculate)){
 						unset($posted['wc_bookings_field_persons']);
 						$posted = array_merge($posted,$personfor_calculate);
 					}
-				$cost = $booking_form->calculate_booking_cost( $posted );
-				
-		
-		
-				
+				$cost = $booking_form->calculate_booking_cost( $posted );				
 				
 				debug_log_wpexperts('log-'.__LINE__, "The response of get cost of bookable product : " . json_encode($cost));
 				if ( is_wp_error( $cost ) ) {
