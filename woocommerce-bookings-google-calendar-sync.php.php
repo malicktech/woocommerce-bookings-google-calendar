@@ -532,35 +532,30 @@ add_action( 'woocommerce_before_single_product', 'action_woocommerce_before_sing
 add_action('wp_ajax_google-push-notification-call', 'action_woocommerce_before_single_product');
 
 /* CRON every five seconde */
-function my_cron_schedules($schedules){
-	if(!isset($schedules["5sec"])){
-        $schedules["5sec"] = array(
-            'interval' => 5,
-            'display' => __('Once every 5 secondes'));
-    }
-	if(!isset($schedules["5min"])){
-        $schedules["5min"] = array(
-            'interval' => 5*60,
-            'display' => __('Once every 5 minutes'));
-    }
-    if(!isset($schedules["30min"])){
-        $schedules["30min"] = array(
-            'interval' => 30*60,
-            'display' => __('Once every 30 minutes'));
+
+//  Add a filter to the cron_schedules
+// See http://codex.wordpress.org/Plugin_API/Filter_Reference/cron_schedules
+add_filter('cron_schedules','my_cron_schedules_every_minute');
+function my_cron_schedules_every_minute($schedules){
+	if(!isset($schedules["1min"])){
+        $schedules["1min"] = array(
+            'interval' => 60*1,
+            'display' => __('Once every minute'));
     }
     return $schedules;
 }
-add_filter('cron_schedules','my_cron_schedules');
-
-register_activation_hook(__FILE__, 'google_sync_cron_activation');
  
-function google_sync_cron_activation() {
- if (! wp_next_scheduled ( 'mon_evenement_sync_google' )) {
- wp_schedule_event(time(), '5sec', 'mon_evenement_sync_google');
+// Schedule an action if it's not already scheduled
+ if (! wp_next_scheduled ( 'my_cron_schedules_every_minute' )) {
+ wp_schedule_event(time(), '1min', 'my_cron_schedules_every_minute');
  }
-}
  
-add_action('mon_evenement_sync_google', 'action_woocommerce_before_single_product');
+// Hook into that action that'll fire every 1 minute
+add_action('my_cron_schedules_every_minute', 'every_one_minutes_event_func');
+function every_one_minutes_event_func() {
+	// do something
+	debug_log_wpexperts('log-'.__LINE__, "CALL every_one_minutes_event_func");
+}
 
 
 function bookings_list_page(){
