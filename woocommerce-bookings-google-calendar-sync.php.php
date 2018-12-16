@@ -529,7 +529,7 @@ add_action( 'woocommerce_before_single_product', 'action_woocommerce_before_sing
 // Use the AJAX API
 // register an ajax action and use that action url to send requests.
 // https://spa-prive-lille.fr/wp-admin/admin-ajax.php?action=google-push-notification-call
-add_action('wp_ajax_google-push-notification-call', 'action_woocommerce_before_single_product');
+// add_action('wp_ajax_google-push-notification-call', 'action_woocommerce_before_single_product');
 
 /* CRON every five seconde */
 
@@ -551,11 +551,10 @@ function my_cron_schedules_every_minute($schedules){
  }
  
 // Hook into that action that'll fire every 1 minute
-add_action('my_cron_schedules_every_minute', 'every_one_minutes_event_func');
-function every_one_minutes_event_func() {
-	// do something
-	debug_log_wpexperts('log-'.__LINE__, "CALL every_one_minutes_event_func");
-}
+add_action('my_cron_schedules_every_minute', 'action_woocommerce_before_single_product');
+// function every_one_minutes_event_func() {
+// 	debug_log_wpexperts('log-'.__LINE__, "CALL every_one_minutes_event_func");
+// }
 
 
 function bookings_list_page(){
