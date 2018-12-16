@@ -197,7 +197,7 @@ function delete_log_function(){
 // define the woocommerce_before_single_product callback 
 function action_woocommerce_before_single_product(  ) {
 
-	debug_log_wpexperts('log-'.__LINE__, 'call action_woocommerce_before_single_product';
+	debug_log_wpexperts('log-'.__LINE__, 'call action_woocommerce_before_single_product');
 
 	$t=time();
 	$get_transient = get_transient( 'google_sync' );
@@ -491,7 +491,7 @@ function action_woocommerce_before_single_product(  ) {
 					
 					if($updated_events){
 						// echo '#'.$updated_events.' bookings has been added.';
-						debug_log_wpexperts('log-'.__LINE__, '#'.$updated_events.' bookings has been added.';
+						debug_log_wpexperts('log-'.__LINE__, '#'.$updated_events.' bookings has been added.');
 						$wooclass = new WC_Bookings_Google_Calendar_Integration();
 						foreach($event_idies as $event_id){
 							
@@ -515,7 +515,7 @@ function action_woocommerce_before_single_product(  ) {
 						}
 					} else {
 							// echo '#0 booking has been added.';
-							debug_log_wpexperts('log-'.__LINE__, '#0 bookings has been added.';
+							debug_log_wpexperts('log-'.__LINE__, '#0 bookings has been added.');
 					}
 			}
 	}
