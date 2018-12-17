@@ -90,16 +90,12 @@ function overwrite_person_info($data, $booking){
         	    }
 	    }
 		
-		// var_dump($booking);
-		// debug_log_wpexperts();
-		// $customer = $booking->get_customer();
 		$bookingorder    = $booking->get_order();
+		$booking_status = $booking->get_status();
+
 		// debug_log_wpexperts('log-'.__LINE__, $booking);
 		// debug_log_wpexperts('log-'.__LINE__, $bookingorder);
-		$booking_status = $booking->get_status();
-		if($booking_status == 'wc-partial-payment') {
-			$booking_status = 'Acompte';
-		}
+		
 		elseif($booking_status == 'paid') {
 			$booking_status = 'Pay&eacute;';
 		}
@@ -109,33 +105,31 @@ function overwrite_person_info($data, $booking){
 
 		$booking_order_status = $bookingorder && $bookingorder->get_status() ? $bookingorder->get_status(): '';
 		if($booking_order_status == 'completed') {
-			$booking_order_status = 'Termin&eacute;';
+			$booking_order_status = 'T&eacutermin&eacute;';
 		} 
-		elseif($booking_order_status == 'partial-payment' || $booking_order_status == 'wc-partial-payment') {
+		elseif($booking_order_status == 'partial-payment') {
 			$booking_order_status = 'Acompte';
 		}
-		// else : confirmed
-
-		// TODO if order status = 'partial-payment'
-		// TODO if ORDER status = 'PENDING', status = 'completed'
+		elseif($booking_order_status == 'pending') {
+			$booking_order_status = 'En cours';
+		}
 
 		// https://businessbloomer.com/woocommerce-easily-get-order-info-total-items-etc-from-order-object/
 		// debug_log_wpexperts('log-'.__LINE__, $booking->get_order_id());
-		$retrieved_eventdescriptionnote = get_post_meta( $booking->get_order_id(), 'eventdescriptionnote', true );
-		// debug_log_wpexperts('log-'.__LINE__, $retrieved_eventdescriptionnote);
+		$retrieved_notes = get_post_meta( $booking->get_order_id(), 'notes', true );
 
 		// Author : Malick
 		// info person mis dans la description
 		$booking_data = array(
-			__( 'Notes', 'woocommerce-bookings' )   => $retrieved_eventdescriptionnote ? $retrieved_eventdescriptionnote: '',
+			__( 'Notes', 'woocommerce-bookings' )   => $retrieved_notes ? $retrieved_notes: '',
 			__( 'Identifiant r&eacute;servation', 'woocommerce-bookings' )   => $booking->get_id(),
 			__( 'Statut r&eacute;servation', 'woocommerce-bookings' )   => $booking_status,
+			__( 'Statut commande', 'woocommerce-bookings' )   => $booking_order_status,
 			__( 'Client', 'woocommerce-bookings' )    => $booking->get_customer() && ! empty( $booking->get_customer()->name ) ? $booking->get_customer()->name : 'Employe Saona',
 			__( 'Salle', 'woocommerce-bookings' ) => is_object( $resource ) ? $resource->get_title() : '',
 			__( 'Persons', 'woocommerce-bookings' )      => $booking->has_persons() ? array_sum( $booking->get_persons() ) : 0,
-			__( 'Date commande', 'woocommerce-bookings' )   => $bookingorder && $bookingorder->get_date_created() ? $bookingorder->get_date_created()->date( 'Y-m-d H:i:s' ) : '',
-			__( 'Statut commande', 'woocommerce-bookings' )   => $booking_order_status,
 			__( 'Montant pay&eacute;', 'woocommerce-bookings' )   => $bookingorder && $bookingorder->get_formatted_order_total() ? $bookingorder->get_formatted_order_total(): '',
+			__( 'Date commande', 'woocommerce-bookings' )   => $bookingorder && $bookingorder->get_date_created() ? $bookingorder->get_date_created()->date( 'Y-m-d H:i:s' ) : '',
 		);
 		
 		if(!empty($booking_persontype) and is_array($booking_persontype)){
@@ -908,7 +902,7 @@ function get_goo_list($access_token){
 			}
 }
 
-function wpexp_create_booking_order( $pid,$event_title ,$cost, $eventdescriptionnote){
+function wpexp_create_booking_order( $pid,$event_title ,$cost, $notes){
 	$order_date = new DateTime();
 	// build order data
 	$order_data = array(
@@ -923,7 +917,7 @@ function wpexp_create_booking_order( $pid,$event_title ,$cost, $eventdescription
 		'post_date'     => date_format($order_date, 'Y-m-d H:i:s e'), //'order-jun-19-2014-0648-pm'
 		'comment_status' => 'open',
 		'meta_input'   => array(
-			'eventdescriptionnote' =>  $eventdescriptionnote
+			'notes' =>  $notes
 		)
 	);
 
