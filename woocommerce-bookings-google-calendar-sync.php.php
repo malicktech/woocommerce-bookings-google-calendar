@@ -105,7 +105,7 @@ function overwrite_person_info($data, $booking){
 
 		$booking_order_status = $bookingorder && $bookingorder->get_status() ? $bookingorder->get_status(): '';
 		if($booking_order_status == 'completed') {
-			$booking_order_status = 'T&eacutermin&eacute;';
+			$booking_order_status = 'Términ&eacute;';
 		} 
 		elseif($booking_order_status == 'partial-payment') {
 			$booking_order_status = 'Acompte';
@@ -118,9 +118,10 @@ function overwrite_person_info($data, $booking){
 		// debug_log_wpexperts('log-'.__LINE__, $booking->get_order_id());
 		$retrieved_notes = get_post_meta( $booking->get_order_id(), 'notes', true );
 
-		// Author : Malick
+
+	// Author : Malick
 		// info person mis dans la description
-		$booking_data = array(
+$booking_data = array(
 			__( 'Notes', 'woocommerce-bookings' )   => $retrieved_notes ? $retrieved_notes: '',
 			__( 'Identifiant r&eacute;servation', 'woocommerce-bookings' )   => $booking->get_id(),
 			__( 'Statut r&eacute;servation', 'woocommerce-bookings' )   => $booking_status,
