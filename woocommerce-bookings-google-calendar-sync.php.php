@@ -96,7 +96,7 @@ function overwrite_person_info($data, $booking){
 		// debug_log_wpexperts('log-'.__LINE__, $booking);
 		// debug_log_wpexperts('log-'.__LINE__, $bookingorder);
 		
-		elseif($booking_status == 'paid') {
+		if($booking_status == 'paid') {
 			$booking_status = 'Pay&eacute;';
 		}
 		elseif($booking_status == 'confirmed') {
