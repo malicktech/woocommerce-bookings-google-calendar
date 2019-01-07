@@ -351,14 +351,9 @@ function action_woocommerce_before_single_product(  ) {
 													$personfor_calculate['wc_bookings_field_persons_'.$posts->ID] = $valuexploded[1];
 												}
 											}
-										}								
-											
-										}
-										
-									
-									}
-									
-													
+										}																			
+										}																			
+									}																						
 								}
 												
 								// custom - set ressource automatically
@@ -376,9 +371,7 @@ function action_woocommerce_before_single_product(  ) {
 								$resource_name = get_page_by_title($resource_name, OBJECT, 'bookable_resource');					
 								if(!empty($resource_name->ID)){ $resource_id = $resource_name->ID;}else{ $resource_id = null; }					
 							}
-
 							
-
 								if(empty($person)){
 									$person = 1;
 								}
@@ -428,15 +421,13 @@ function action_woocommerce_before_single_product(  ) {
 								$posted['wc_bookings_field_resource'] = @$resource_id;
 								$posted['wc_bookings_field_start_date_to_day'] = $endday;
 								$posted['wc_bookings_field_start_date_to_year'] = $endyearss;
-
 								
 								if(!empty($personfor_calculate) and is_array($personfor_calculate)){
 									unset($posted['wc_bookings_field_persons']);
 									$posted = array_merge($posted,$personfor_calculate);
 								}
 							$cost = $booking_form->calculate_booking_cost( $posted );
-					
-							
+												
 							debug_log_wpexperts('log-'.__LINE__, "The response of get cost of bookable product : " . json_encode($cost));
 							if ( is_wp_error( $cost ) ) {
 								update_log_in_db($cost,$event_title,$event_id);
@@ -454,13 +445,12 @@ function action_woocommerce_before_single_product(  ) {
 									update_log_in_db($new_booking,$event_title,$event_id);
 								}
 								debug_log_wpexperts('log-'.__LINE__, "The response of create_wpexp_wc_booking : " . json_encode($new_booking));
-							} else {
+							} 
+							// else {
 												
-							}
+							// }
 							
-							if(@$new_booking and is_numeric($cost)){
-								
-								
+							if(@$new_booking and is_numeric($cost)){															
 								$order_id = wpexp_create_booking_order($product->ID,$event_title,$cost, $event->description);
 								if($order_id){
 									// Update post 37
@@ -470,13 +460,11 @@ function action_woocommerce_before_single_product(  ) {
 									);
 									// Update the post into the database
 									wp_update_post( $my_post );
-									
-									
+																		
 									if(true){
 										$event_idies[] = $event_id;
 										$updated_events++;
-									}
-									
+									}									
 								}
 							}
 						}
@@ -581,18 +569,35 @@ function bookings_list_page(){
 	
 	$wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_settings');
 	if(!empty($wc_bookings_google_calendar_settings['client_id']) && !empty($wc_bookings_google_calendar_settings['client_secret'])){
-	if(@$_POST['import']){
-		$access_token = get_transient( 'wc_bookings_gcalendar_access_token' );
-		if(!empty($access_token)){
-			$service = get_goo_list($access_token);
-		} else {
-			$wooclass = new WC_Bookings_Google_Calendar_Integration();
-			$wooclass->get_access_token();
+		if(@$_POST['import']){
 			$access_token = get_transient( 'wc_bookings_gcalendar_access_token' );
-			//again sync function.
-			$service = get_goo_list($access_token);
+			if(!empty($access_token)){
+				$service = get_goo_list($access_token);
+			} else {
+				$wooclass = new WC_Bookings_Google_Calendar_Integration();
+				$wooclass->get_access_token();
+				$access_token = get_transient( 'wc_bookings_gcalendar_access_token' );
+				//again sync function.
+				$service = get_goo_list($access_token);
+			}
 		}
-	}
+		// CUSTOM - @citizendiop
+		if(@$_POST['makewatch']){
+			$access_token = get_transient( 'wc_bookings_gcalendar_access_token' );
+			if(!empty($access_token)){
+				// $service = get_goo_list($access_token);
+				making_watch_requests($access_token);
+				echo 'post on makewatch button - not empty acces token';
+			} else {
+				$wooclass = new WC_Bookings_Google_Calendar_Integration();
+				$wooclass->get_access_token();
+				$access_token = get_transient( 'wc_bookings_gcalendar_access_token' );
+				//again sync function.
+				// $service = get_goo_list($access_token);
+				making_watch_requests($access_token);
+				echo 'post on makewatch button - not empty acces token';
+			}
+		}
 	}else{
 		$service = '';
 		echo 'Please update your required values <a href="admin.php?page=wc-settings&tab=integration">here</a> to start import bookings from Google Calendar.';
@@ -603,13 +608,8 @@ function bookings_list_page(){
 		$calendar_id = $wc_bookings_google_calendar_settings['calendar_id'];
 	
 		$updated_events = 0;
-		
-		
-		
-		
 					
-	if(!empty($service->items)) {
-							
+	if(!empty($service->items)) {							
 		  foreach ($service->items as $event) {
 			$event_id = $event->id;			
 			$event_title = @$event->summary;
@@ -622,24 +622,20 @@ function bookings_list_page(){
 				$end = $event->end->date;
 				$end = date('Y-m-d', strtotime('-1 day', strtotime($end)));
 				$_booking_all_day = true;
-			} elseif($event->start->dateTime) {
-				
+			} elseif($event->start->dateTime) {		
 				$startdatetimeexploded = explode('T',$event->start->dateTime);
 				$enddatetimeexploded = explode('T',$event->end->dateTime);
 				
 				$start = $startdatetimeexploded[0];
 				$end = $enddatetimeexploded[0];
 				$end = date('Y-m-d', strtotime(($end)));
-				
-				
-				
+
 				$startdatetimeexploded_time = explode(':',str_replace('Z','',$startdatetimeexploded[1]));
 				$enddatetimeexploded_time = explode(':',str_replace('Z','',$enddatetimeexploded[1]));
 				
 				$posted['wc_bookings_field_start_date_time'] = $startdatetimeexploded_time[0].':'.$startdatetimeexploded_time[1];
 				$posted['wc_bookings_field_end_date_time'] = $enddatetimeexploded_time[0].':'.$enddatetimeexploded_time[1];
 				$_booking_all_day = false;
-				
 			}		
 			
 			$check_booking_status = explode('-', $event_title);// TODO ?
@@ -650,8 +646,7 @@ function bookings_list_page(){
 					if(!empty($event_description)){
 						$person=str_replace(':','',$event_description[1]);
 					} */
-					
-					
+										
 					$re = '/^(\w+):|(.+)/';
 					preg_match_all($re, $event->description, $matches, PREG_SET_ORDER, 0);
 					$return = array();
@@ -664,10 +659,6 @@ function bookings_list_page(){
 						}
 					}
 				    $returns = array_filter(array_unique($return));
-					
-					
-					
-					
 					
 					if(!empty($returns) and is_array($returns)){
 						$persontypeid = array();
@@ -693,26 +684,23 @@ function bookings_list_page(){
 							}
 							if(in_array('booking type',($valuexploded))){
 								 $resource_name = trim($valuexploded[1]);
-							}
-							
-							
+							}												
 							
 							$getting_persontype = explode('-',$valuexploded[0]);
 							
 							if(is_array($getting_persontype) and count($getting_persontype) >= 2){
 								
-									$args = array('post_type' => 'bookable_person');
-									$loop = new WP_Query( $args );
-									  
-								
-							if(is_array($loop->posts)){
-								foreach($loop->posts as $posts){
-									if(strtolower($posts->post_title) == strtolower($getting_persontype[1])){
-										$persontypeid[$posts->ID] = $valuexploded[1];
-										$personfor_calculate['wc_bookings_field_persons_'.$posts->ID] = $valuexploded[1];
+								$args = array('post_type' => 'bookable_person');
+								$loop = new WP_Query( $args );			
+									
+								if(is_array($loop->posts)){
+									foreach($loop->posts as $posts){
+										if(strtolower($posts->post_title) == strtolower($getting_persontype[1])){
+											$persontypeid[$posts->ID] = $valuexploded[1];
+											$personfor_calculate['wc_bookings_field_persons_'.$posts->ID] = $valuexploded[1];
+										}
 									}
-								}
-							}																																	
+								}																																	
 							}													
 						}										
 					}
@@ -728,8 +716,7 @@ function bookings_list_page(){
 				
 					if(empty($person)){
 						$person = 1;
-					}
-					
+					}				
 					
 					if(!empty($persontypeid)){
 						$qty = $persontypeid;
@@ -780,7 +767,7 @@ function bookings_list_page(){
 						unset($posted['wc_bookings_field_persons']);
 						$posted = array_merge($posted,$personfor_calculate);
 					}
-				$cost = $booking_form->calculate_booking_cost( $posted );				
+					$cost = $booking_form->calculate_booking_cost( $posted );				
 				
 				debug_log_wpexperts('log-'.__LINE__, "The response of get cost of bookable product : " . json_encode($cost));
 				if ( is_wp_error( $cost ) ) {
@@ -793,13 +780,10 @@ function bookings_list_page(){
 						update_log_in_db($new_booking,$event_title,$event_id);
 					}
 					debug_log_wpexperts('log-'.__LINE__, "The response of create_wpexp_wc_booking : " . json_encode($new_booking));
-				} else {
-									
-				}
+				} 
+				// else {}
 				
 				if(@$new_booking and is_numeric($cost)){
-					
-					
 					$order_id = wpexp_create_booking_order($product->ID,$event_title,$cost, $event->description);
 					if($order_id){
 						// Update post 37
@@ -809,22 +793,18 @@ function bookings_list_page(){
 						);
 						// Update the post into the database
 						wp_update_post( $my_post );
-						
-						
+											
 						if(true){
 							$event_idies[] = $event_id;
 							$updated_events++;
-						}
-						
+						}					
 					}
 				}
-			}
-				
-				// }
-		  }
+			}	
+		// }
+		}
 	}
-		  
-		
+		  	
 		if($updated_events){
 			echo '#'.$updated_events.' bookings has been added.';
 			$wooclass = new WC_Bookings_Google_Calendar_Integration();
@@ -851,56 +831,103 @@ function bookings_list_page(){
 		} else {
 			echo '#0 booking has been added.';
 		}
-		
 	}?>
 	
 	<div class="wrap">
 		<div class="bookings_options_panel">
-			<form action="" method="post">
-				
+			<form action="" method="post">	
 				<p class="form-field">
 					<input type="submit" value="Authorized  & Import" accesskey="p" id="publish" class="button button-primary button-large" name="import">
 				</p>
 			</form>
 		</div>
 	</div>
+
+	<!-- CUSTOM - Google Push Notifications - Button to trigger creation of notification channels -->
+	<h1>Google Push Notifications - Make watch request</h1>
+	<div class="wrap">
+		<div class="bookings_options_panel">
+			<form action="" method="post">	
+				<p class="form-field">
+					<input type="submit" value="Making watch  request" accesskey="p" id="publish" class="button button-primary button-large" name="makewatch">
+				</p>
+			</form>
+		</div>
+	</div>
+
 	<?php 
+}
+
+// @Citizend DIOP
+function making_watch_requests($access_token){
+	$form_data = array(
+		'id'=>'saona-notif-chanel-id-01234567-89ab-cdef-0123456789ab',
+		'type'=>'web_hook',
+		'address'=> 'https://saona.sne.ovh/notifications'
+	);
+	$curl = curl_init();
+	$data_string = json_encode($form_data);
+	curl_setopt_array($curl, array(
+	  CURLOPT_URL => "https://www.googleapis.com/calendar/v3/calendars/".$calendar_id."/events/watch",
+	  CURLOPT_RETURNTRANSFER => true,
+	  CURLOPT_ENCODING => "",
+	  CURLOPT_MAXREDIRS => 10,
+	  CURLOPT_TIMEOUT => 30,
+	  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	  CURLOPT_CUSTOMREQUEST => "POST",
+	  CURLOPT_POSTFIELDS => $data_string,
+	  CURLOPT_HTTPHEADER => array(
+		"authorization: Bearer ".$access_token,
+		"cache-control: no-cache",
+		"content-type: application/json"
+	  ),
+	));
+	$response = curl_exec($curl);
+	$err = curl_error($curl);
+	curl_close($curl);
+	if ($err) {
+		echo "cURL Error #:" . $err;
+		debug_log_wpexperts('log-'.__LINE__, "cURL Error #:" . $err);
+	} else {
+		echo "cURL Success #:" . json_decode($response);
+	}
 }
 
 // Récupération de la liste des events google
 // timemIN FORMAT = 2018-10-20T14:30:00Z
+
 function get_goo_list($access_token){
 			
-			// Google calendar api GET event
-			// https://developers.google.com/calendar/v3/reference/events/list
-			$wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_settings');
-	        $calendar_id = $wc_bookings_google_calendar_settings['calendar_id'];
-	        $today = date("Y-m-d", strtotime("-1 days"));
-	        
-			$curl = curl_init();
-			curl_setopt_array($curl, array(
-			CURLOPT_URL => "https://www.googleapis.com/calendar/v3/calendars/".$calendar_id."/events?access_token=".$access_token."&timeMin=".$today."T00%3A00%3A00%2B00%3A00&maxResults=2450",
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_ENCODING => "",
-			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 30,
-			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			CURLOPT_CUSTOMREQUEST => "GET",
-			CURLOPT_HTTPHEADER => array(
-			"cache-control: no-cache"
-			),
-			));
+	// Google calendar api GET event
+	// https://developers.google.com/calendar/v3/reference/events/list
+	$wc_bookings_google_calendar_settings = get_option('wc_bookings_google_calendar_settings');
+	$calendar_id = $wc_bookings_google_calendar_settings['calendar_id'];
+	$today = date("Y-m-d", strtotime("-1 days"));
+	
+	$curl = curl_init();
+	curl_setopt_array($curl, array(
+	CURLOPT_URL => "https://www.googleapis.com/calendar/v3/calendars/".$calendar_id."/events?access_token=".$access_token."&timeMin=".$today."T00%3A00%3A00%2B00%3A00&maxResults=2450",
+	CURLOPT_RETURNTRANSFER => true,
+	CURLOPT_ENCODING => "",
+	CURLOPT_MAXREDIRS => 10,
+	CURLOPT_TIMEOUT => 30,
+	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+	CURLOPT_CUSTOMREQUEST => "GET",
+	CURLOPT_HTTPHEADER => array(
+	"cache-control: no-cache"
+	),
+	));
 
-			$response = curl_exec($curl);
-			$err = curl_error($curl);
+	$response = curl_exec($curl);
+	$err = curl_error($curl);
 
-			curl_close($curl);
+	curl_close($curl);
 
-			if ($err) {
-				echo "cURL Error #:" . $err;
-			} else {
-				return $service = json_decode($response);
-			}
+	if ($err) {
+		echo "cURL Error #:" . $err;
+	} else {
+		return $service = json_decode($response);
+	}
 }
 
 function wpexp_create_booking_order( $pid,$event_title ,$cost, $notes){
@@ -970,17 +997,14 @@ function wpexp_create_booking_order( $pid,$event_title ,$cost, $notes){
 			wp_set_object_terms( $order_id, 'completed', 'shop_order_status' );
 			
 			return $order_id;
-
 		}
-	}else{
+	} else {
 		return false;
 	}
 }
 
 function get_wpexp_product( $product_id ) {
-
     if ( $product_id ) return new WC_Product( $product_id );
-
     return null;
 }
 
@@ -995,7 +1019,6 @@ function create_wpexp_wc_booking( $product_id, $new_booking_data = array(), $sta
 		'resource_id' => '',
 	);
 
-	
 	$new_booking_data = wp_parse_args( $new_booking_data, $defaults );
 	
 	$product          = wc_get_product( $product_id );
@@ -1004,9 +1027,7 @@ function create_wpexp_wc_booking( $product_id, $new_booking_data = array(), $sta
 	$start_date       = $new_booking_data['start_date'];
 	$end_date         = $new_booking_data['end_date'];
 	// $max_date         = $product->get_max_date();
-	
-	
-	
+		
 	
 	if(!$new_booking_data['_booking_all_day']){
 		$bookable_product = $product;
@@ -1051,10 +1072,7 @@ function create_wpexp_wc_booking( $product_id, $new_booking_data = array(), $sta
 					$midnight                 = strtotime( 'midnight', $check_date ); // Midnight on the date being checked is 00:00 start of day.
 					$before_midnight_tomorrow = strtotime( '23:59', $check_date );    // End of the date being checked, not the following morning.
 
-					// Regardless of duration unit, we need to pass all blocks of bookings so that the availability rules are properly calculated against.
-					
-					
-					
+					// Regardless of duration unit, we need to pass all blocks of bookings so that the availability rules are properly calculated against.															
 					
 					$booking_start_and_end    = $WC_Bookings_Controller->get_bookings_star_and_end_times( $existing_bookings );
 					//this product already have timebooked slot check below condition
@@ -1083,8 +1101,7 @@ function create_wpexp_wc_booking( $product_id, $new_booking_data = array(), $sta
 							} 
 						}
 						
-					}
-						
+					}						
 					$check_date = strtotime( '+1 day', $check_date );
 				}
 		}
@@ -1098,13 +1115,9 @@ function create_wpexp_wc_booking( $product_id, $new_booking_data = array(), $sta
 	} else {
 		debug_log_wpexperts('log-'.__LINE__, "The response of get_available_bookings : " . json_encode($available_bookings));
 	}
-	
-	
-
 						
 	$date_diff = $end_date - $start_date;
 
-	
 	// Set dates
 	if(empty(is_wp_error( $available_bookings )) and $available_bookings == 1){
 		$new_booking_data['start_date'] = $start_date;
@@ -1124,8 +1137,7 @@ function create_wpexp_wc_booking( $product_id, $new_booking_data = array(), $sta
 						)
 					,$event_id,get_transient( 'wc_bookings_gcalendar_access_token' ));
 		return false;
-	}
-	
+	}	
 }
 
 function register_activation_hook_function(){
@@ -1181,6 +1193,7 @@ function update_google_calendar($form_data=array(),$event_id,$access_token){
 	curl_close($curl);
 	if ($err) {
 	  // echo "cURL Error #:" . $err;
+	  debug_log_wpexperts('log-'.__LINE__, "cURL Error #:" . $err);
 	} else {
 			
 	}

@@ -6,6 +6,7 @@
  * Will put bookings into a Confirmed status if they were paid for via Deposit.
  * 
  * @param int $order_id The order id
+ * @see https://squelchdesign.com/web-design-newbury/woocommerce-detecting-order-complete-on-order-completion/
  * 
  */
 function set_deposit_payment_bookings_confirmed_20170825($order_id)
@@ -81,4 +82,14 @@ function debug_to_console($data)
     else
         $output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
     echo $output;
+}
+
+add_action('woocommerce_booking_wc-partial-payment', 'booking_partial_payment', 10, 1);
+function booking_partial_payment($booking_id)
+{
+        echo "booking_partial_payment\n";
+	     echo $booking_id." booking_partial_payment \n";
+	$booking = get_wc_booking($booking_id);
+	echo "Status \n";
+            echo $booking->get_status()."\n";
 }
