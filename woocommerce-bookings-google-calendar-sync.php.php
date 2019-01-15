@@ -251,8 +251,16 @@ function action_woocommerce_before_single_product(  ) {
 						$event_id = $event->id;		
 						$event_title = @$event->summary; 
 						// Author = @Malick
-						// $event_titlearray = explode('-',$event_title);
-						// if(trim($event_titlearray[0]) == 'Booking' or trim($event_titlearray[0]) == 'booking'){
+
+						$event_titlearray = explode('-',$event_title);
+						// if event TO DELETE
+						// sample : #5852 - CAPITAINE - D
+						// event_titlearray SIZE = 3 && event_titlearray[2] == 'D'
+						if(strtoupper(trim($event_titlearray[2]) == 'D'){
+							$booking_id_to_delete = substr(trim($event_titlearray[1]), 1); // from #5852 to 5852
+							$booking_to_delete = get_wc_booking( $booking_id );
+							$booking_to_delete->update_status( 'cancelled' );
+						}
 							
 						$posted = array();
 						if(!empty($event->start->date)){
@@ -267,9 +275,7 @@ function action_woocommerce_before_single_product(  ) {
 							
 							$start = $startdatetimeexploded[0];
 							$end = $enddatetimeexploded[0];
-							$end = date('Y-m-d', strtotime(($end)));
-							
-							
+							$end = date('Y-m-d', strtotime(($end)));														
 							
 							$startdatetimeexploded_time = explode(':',str_replace('Z','',$startdatetimeexploded[1]));
 							$enddatetimeexploded_time = explode(':',str_replace('Z','',$enddatetimeexploded[1]));
