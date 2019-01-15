@@ -65,6 +65,7 @@ function bookings_wpexp_script(){
 
 add_filter( 'woocommerce_bookings_gcalendar_sync', 'overwrite_person_info',20,2);
 
+
 function overwrite_person_info($data, $booking){
 	
 	if(!empty($data)){
@@ -116,11 +117,13 @@ function overwrite_person_info($data, $booking){
 		// debug_log_wpexperts('log-'.__LINE__, $booking->get_order_id());
 		$retrieved_notes = get_post_meta( $booking->get_order_id(), 'notes', true );
 
+		$back_office_link = admin_url( 'post.php?post=' . $booking->get_order_id() . '&action=edit' );
 
 	// Author : Malick
 		// info person mis dans la description
 $booking_data = array(
 			__( 'Notes', 'woocommerce-bookings' )   => $retrieved_notes ? $retrieved_notes: '',
+			__( 'Lien', 'woocommerce-bookings' )   => $back_office_link,
 			__( 'Identifiant r&eacute;servation', 'woocommerce-bookings' )   => $booking->get_id(),
 			__( 'Statut r&eacute;servation', 'woocommerce-bookings' )   => $booking_status,
 			__( 'Statut commande', 'woocommerce-bookings' )   => $booking_order_status,
