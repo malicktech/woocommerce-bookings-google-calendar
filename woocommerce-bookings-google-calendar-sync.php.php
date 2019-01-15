@@ -117,7 +117,7 @@ function overwrite_person_info($data, $booking){
 		// debug_log_wpexperts('log-'.__LINE__, $booking->get_order_id());
 		$retrieved_notes = get_post_meta( $booking->get_order_id(), 'notes', true );
 
-		$back_office_link = admin_url( 'post.php?post=' .$bookingorder->get_id(). '&action=edit' );
+		$back_office_link = admin_url( 'post.php?post=' . $booking->get_order_id() . '&action=edit' );
 
 	// Author : Malick
 		// info person mis dans la description
