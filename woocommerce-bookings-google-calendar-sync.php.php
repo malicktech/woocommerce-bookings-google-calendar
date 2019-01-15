@@ -262,7 +262,7 @@ function action_woocommerce_before_single_product(  ) {
 						debug_log_wpexperts('log-'.__LINE__, 'count ='.count($event_titlearray));
 						if(count($event_titlearray) == 3){
 							// debug_log_wpexperts('log-'.__LINE__, 'event tiite array 2 = '.$event_titlearray[2]);
-							if(strtoupper(trim($event_titlearray[2]) == 'D')){
+							if(strtoupper(trim($event_titlearray[2])) == 'D'){
 								// debug_log_wpexperts('log-'.__LINE__, 'even ttitle array 1 = '.$event_titlearray[0]);
 								// get id, from #5852 to 5852
 								$booking_id_to_delete = substr(trim($event_titlearray[0]), 1);
@@ -605,7 +605,7 @@ function bookings_list_page(){
 			debug_log_wpexperts('log-'.__LINE__, 'count ='.count($event_titlearray));
 			if(count($event_titlearray) == 3){
 				// debug_log_wpexperts('log-'.__LINE__, 'event tiite array 2 = '.$event_titlearray[2]);
-				if(strtoupper(trim($event_titlearray[2]) == 'D')){
+				if(strtoupper(trim($event_titlearray[2])) == 'D'){
 					// debug_log_wpexperts('log-'.__LINE__, 'even ttitle array 1 = '.$event_titlearray[0]);
 					// get id, from #5852 to 5852
 					$booking_id_to_delete = substr(trim($event_titlearray[0]), 1);
