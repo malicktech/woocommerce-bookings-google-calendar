@@ -256,15 +256,20 @@ function action_woocommerce_before_single_product(  ) {
 						// if event TO DELETE
 						// sample : #5852 - CAPITAINE - D
 						// event_titlearray SIZE = 3 && event_titlearray[2] == 'D'
+						debug_log_wpexperts('log-'.__LINE__, 'count ='.count($event_titlearray));
 						if(count($event_titlearray) == 3){
+							// debug_log_wpexperts('log-'.__LINE__, 'event tiite array 2 = '.$event_titlearray[2]);
 							if(strtoupper(trim($event_titlearray[2]) == 'D')){
+								// debug_log_wpexperts('log-'.__LINE__, 'even ttitle array 1 = '.$event_titlearray[0]);
 								// get id, from #5852 to 5852
-								$booking_id_to_delete = substr(trim($event_titlearray[0]), 1); 
+								$booking_id_to_delete = substr(trim($event_titlearray[0]), 1);
+								debug_log_wpexperts('log-'.__LINE__, 'even ttitle array 0 substr = '.$booking_id_to_delete); 
 								// change status
-								$booking_to_delete = get_wc_booking( $booking_id );
+								$booking_to_delete = get_wc_booking( $booking_id_to_delete );
 								$booking_to_delete->update_status( 'cancelled' );
 							}
-						}
+						} 
+						else {
 							
 						$posted = array();
 						if(!empty($event->start->date)){
@@ -465,6 +470,7 @@ function action_woocommerce_before_single_product(  ) {
 							}
 						}
 					}
+					}
 				}
 					
 					
@@ -589,7 +595,26 @@ function bookings_list_page(){
 			$event_title = @$event->summary;
 			// Author = @Malick 
 			// $event_titlearray = explode('-',$event_title);
+			$event_titlearray = explode('-',$event_title);
+			// if event TO DELETE
+			// sample : #5852 - CAPITAINE - D
+			// event_titlearray SIZE = 3 && event_titlearray[2] == 'D'
+			debug_log_wpexperts('log-'.__LINE__, 'count ='.count($event_titlearray));
+			if(count($event_titlearray) == 3){
+				// debug_log_wpexperts('log-'.__LINE__, 'event tiite array 2 = '.$event_titlearray[2]);
+				if(strtoupper(trim($event_titlearray[2]) == 'D')){
+					// debug_log_wpexperts('log-'.__LINE__, 'even ttitle array 1 = '.$event_titlearray[0]);
+					// get id, from #5852 to 5852
+					$booking_id_to_delete = substr(trim($event_titlearray[0]), 1);
+					debug_log_wpexperts('log-'.__LINE__, 'even ttitle array 0 substr = '.$booking_id_to_delete); 
+					// change status
+					$booking_to_delete = get_wc_booking( $booking_id_to_delete );
+					$booking_to_delete->update_status( 'cancelled' );
+				}
+			}	
+			else {		
 			// if(trim($event_titlearray[0]) == 'Booking' or trim($event_titlearray[0]) == 'booking'){
+
 			$posted = array();
 			if(!empty($event->start->date)){
 				$start = $event->start->date;
@@ -774,7 +799,7 @@ function bookings_list_page(){
 					}
 				}
 			}				
-				// }
+				}
 		  }
 	}
 		  
