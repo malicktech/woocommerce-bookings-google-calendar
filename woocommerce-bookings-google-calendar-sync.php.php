@@ -256,13 +256,14 @@ function action_woocommerce_before_single_product(  ) {
 						// if event TO DELETE
 						// sample : #5852 - CAPITAINE - D
 						// event_titlearray SIZE = 3 && event_titlearray[2] == 'D'
-						if(strtoupper(trim($event_titlearray[2]) == 'D'){
-							// from #5852 to 5852
-							$booking_id_string_to_delete = trim($event_titlearray[0]);
-							$booking_id_to_delete = substr($booking_id_string_to_delete, 1); 
-							// change status
-							$booking_to_delete = get_wc_booking( $booking_id );
-							$booking_to_delete->update_status( 'cancelled' );
+						if(count($event_titlearray) == 3){
+							if(strtoupper(trim($event_titlearray[2]) == 'D')){
+								// get id, from #5852 to 5852
+								$booking_id_to_delete = substr(trim($event_titlearray[0]), 1); 
+								// change status
+								$booking_to_delete = get_wc_booking( $booking_id );
+								$booking_to_delete->update_status( 'cancelled' );
+							}
 						}
 							
 						$posted = array();
